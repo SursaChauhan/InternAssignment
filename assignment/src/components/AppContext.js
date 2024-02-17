@@ -4,16 +4,20 @@ const AppContext =createContext();
 
 export const AppProvider=({children})=>{
     const [isAuthenticated,setIsAuthenticated] =useState(false);
+    const [jstoken,setJsToken] =useState(null);
 
-    const login=()=>{
+    const login=(token)=>{
         setIsAuthenticated(true);
+        setJsToken(token);
     }
     const logout=()=>{
         setIsAuthenticated(false);
+        setJsToken(null);
+
     }
     return(
         <>
-        <AppContext.Provider value={{isAuthenticated,login,logout}}>
+        <AppContext.Provider value={{isAuthenticated,login,logout,jstoken}}>
 {children}
         </AppContext.Provider>
         </>

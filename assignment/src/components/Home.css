@@ -1,0 +1,59 @@
+/* Add this CSS to your stylesheet */
+.navhover:hover  .dropdown-menu{
+  display: none;
+  cursor: pointer;
+  background: #000;
+}
+.navdiv{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: relative;
+}
+  
+
+/* product css */
+
+.product-card-container {
+  width: 80%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Three equal-width columns */
+  gap: 30px; /* Gap between grid items */
+}
+
+.product-card {
+  border: 1px solid #ccc;
+  /* padding: 20px; */
+  text-align: center;
+}
+
+.product-card img {
+  background-color: #fafafa;
+  width: 100%;
+  max-width: 100%;
+  /* Ensure image does not exceed container width */
+  height: 250px; /* Maintain aspect ratio */
+}
+
+.product-details {
+  margin-top: 10px;
+}
+
+.product-details p {
+  margin: 5px 0;
+}
+
+.product-details button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.product-details button:hover {
+  background-color: #0056b3;
+}
