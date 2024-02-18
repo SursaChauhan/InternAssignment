@@ -3,8 +3,8 @@ import './Home.css'
 import { IoCart } from "react-icons/io5";
 import AppContext from './AppContext';
 import Products from './Products';
-import Login from './Login';
 import Footer from './Footer';
+<link href="https://fonts.googleapis.com/css?family=Arvo&display=swap" rel="stylesheet"></link>
 // Import your logo image file
 
 const Home = () => {
@@ -25,9 +25,14 @@ const Home = () => {
 
 
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (currentPage,searchTerm) => {
     try {
-      const response = await fetch(`https://dummyjson.com/products?limit=${itemsPerPage}&skip=${(currentPage - 1) * itemsPerPage}`);
+      let Apiurl = `https://dummyjson.com/products?limit=${itemsPerPage}&skip=${(currentPage - 1) * itemsPerPage}`;
+      if(searchTerm){
+        // Apiurl = `https://dummyjson.com/products/search?q=${searchTerm}`
+        Apiurl = `https://dummyjson.com/products/search?q=${searchTerm}`
+      }
+      const response = await fetch(Apiurl);
       const data = await response.json();
       console.log(data);
       setProducts(data.products);
@@ -38,7 +43,7 @@ const Home = () => {
   };
   const fetchUser = async (jstoken) => {
     try {
-      const response = await fetch('https://dummyjson.com/auth/me', {
+      let  response = await fetch('https://dummyjson.com/auth/me', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${jstoken}`,
@@ -47,6 +52,7 @@ const Home = () => {
       const data = await response.json();
       setUserdata(data);
    login(jstoken);
+   
       // console.log(data);
 
     } catch (error) {
@@ -60,7 +66,8 @@ const Home = () => {
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
-    filterProducts(event.target.value);
+  
+    // filterProducts(event.target.value);
   };
 
   const filterProducts = (searchTerm) => {
@@ -115,11 +122,12 @@ const Home = () => {
     // Fetch products when the component mounts
     fetchUser(jstoken);
   }, []);
+
   useEffect(() => {
     // Fetch products when the component mounts
-    fetchProducts();
-  }, [currentPage]);
-  console.log(isAuthenticated)
+    fetchProducts(currentPage,searchTerm);
+  }, [currentPage,searchTerm]);
+ 
 
   return (
     <div>
@@ -153,22 +161,21 @@ const Home = () => {
         </div>
 
         {/* user profile section */}
-        <div className='navhover' style={{ position: 'relative', top: '0', width: '10%', textAlign: 'center' }}>
-          <img src={userdata.image} alt="User" style={{ width: '50px', borderRadius: '50%', marginBottom: '5px' }} />
-          {/* Dropdown menu */}
-          <div className='dropdown-menu' style={{ position: 'absolute', top: '100%', right: '0', background: '#fff', border: '1px solid #ccc', borderRadius: '5px', textAlign: 'left', display: 'block' }}>
-            <ul style={{ listStyle: 'none', padding: '5px' }}>
-              <li>Hi, {userdata.firstName}</li>
-              <li>
-                <button onClick={handlelogout} style={{width:"100%",padding:'0px',marginTop:'5px'}}>
-                  Sign Out
-                </button>
-              </li>
-            </ul>
-          </div>
-        </div>
+<div role="navigation" class="primary-navigation">
 
+  <ul>
+    <li>
+      <img src={userdata.image} alt="User" style={{ width: '50px', borderRadius: '50%', marginBottom: '5px' }} />
 
+      <ul class="dropdown">
+        <li><a href="#">Hi, {userdata.firstName}</a></li>
+        <li onClick={handlelogout}><a href="#">Sign Out</a></li>
+        
+      </ul>
+    </li>
+  
+  </ul>
+</div>
 
       </div>
 
@@ -190,9 +197,7 @@ const Home = () => {
         </div>
         <div style={{width:"78%"}}>
 
-          {/* <h1>
-          products
-        </h1> */}
+        
           <div className="product-card-container">
             {filteredProducts.map((product) => (
               <Products key={product.id} product={product} addToCart={addToCart} cart={cart} removeFromCart={removeFromCart}/>

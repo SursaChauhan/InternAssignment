@@ -1,4 +1,4 @@
-import React,{useContext, useState} from 'react';
+import React,{useContext, useEffect, useState} from 'react';
 import AppContext from './AppContext';
 import { Navigate } from 'react-router-dom';
 import './Login.css'
@@ -26,8 +26,10 @@ try{
 
   });
   const { token } = await response.json() || localStorage.getItem('token');
+
   console.log(token);
   localStorage.setItem('token', JSON.stringify(token));
+  console.log(token);
 
 if(token){
   setUserToken(token);
@@ -41,6 +43,10 @@ if(token){
   console.log(err.message);
 }
 }
+
+
+
+
 if (usertoken) {
   return <Navigate to="/home" />;
 }

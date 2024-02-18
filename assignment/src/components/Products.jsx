@@ -1,10 +1,10 @@
 import React from 'react';
 import './Home.css'
 
-const Products = ({key ,product, addToCart,cart,removeFromCart}) => {
+const Products = ({ product, addToCart,cart,removeFromCart}) => {
   const isInCart = cart.some((item) => item.id === product.id);
   return (
-    <div className="product-card">
+    <div className="product-card" key={product.id}>
 <div>
     <img src={product.thumbnail} alt="thumbnail" />
 </div>
