@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import './Home.css'
 import { IoCart } from "react-icons/io5";
-import  AppContext from './AppContext';
+import AppContext from './AppContext';
 import Products from './Products';
+import Login from './Login';
+import Footer from './Footer';
 // Import your logo image file
 
 const Home = () => {
@@ -11,11 +13,15 @@ const Home = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1000);
-    const [cart, setCart] = useState([]);
-  const [userdata,setUserdata] =useState("");
-const {jstoken,logout,isAuthenticated} =useContext(AppContext);
-const [currentPage, setCurrentPage] = useState(1);
-const itemsPerPage = 10; // Set the number of items per page
+  const [cart, setCart] = useState([]);
+  const [userdata, setUserdata] = useState("");
+
+  const { jstoken, logout, isAuthenticated ,login} = useContext(AppContext);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Set the number of items per page
+  const [totalPrice, setTotalPrice] = useState(0);
+
 
 
 
@@ -32,22 +38,23 @@ const itemsPerPage = 10; // Set the number of items per page
   };
   const fetchUser = async (jstoken) => {
     try {
-      const response = await fetch('https://dummyjson.com/auth/me',{
+      const response = await fetch('https://dummyjson.com/auth/me', {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${jstoken}` , 
+          'Authorization': `Bearer ${jstoken}`,
         },
       });
       const data = await response.json();
       setUserdata(data);
+   login(jstoken);
       // console.log(data);
-   
+
     } catch (error) {
       console.error('Error fetching products:', error);
     }
   };
 
-  const handlelogout =()=>{
+  const handlelogout = () => {
     logout();
   }
 
@@ -68,32 +75,40 @@ const itemsPerPage = 10; // Set the number of items per page
   };
 
   const addToCart = (product) => {
-    // Add product to the cart
-    setCart(prev=> prev + 1);
+     // Add product to the cart
+     setCart((prevCart) => [...prevCart, product]);
+     // Update total price
+     setTotalPrice((prevTotalPrice) => prevTotalPrice + product.price);
 
   };
+  const removeFromCart = (productToRemove) => {
+    setCart((prevCart) => prevCart.filter((product) => product !== productToRemove));
+    // Update total price
+    setTotalPrice((prevTotalPrice) => prevTotalPrice - productToRemove.price);
+};
+
 
   const handleMinPriceChange = (event) => {
     setMinPrice(parseInt(event.target.value));
-};
+  };
 
-const handleMaxPriceChange = (event) => {
+  const handleMaxPriceChange = (event) => {
     setMaxPrice(parseInt(event.target.value));
-};
+  };
 
-const filterProductsByPrice = () => {
-  const filtered = products.filter((product) => {
+  const filterProductsByPrice = () => {
+    const filtered = products.filter((product) => {
       return product.price >= minPrice && product.price <= maxPrice;
-  });
-  setFilteredProducts(filtered);
-};
-const goToNextPage = () => {
-  setCurrentPage((prevPage) => prevPage + 1);
-};
+    });
+    setFilteredProducts(filtered);
+  };
+  const goToNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
 
-const goToPrevPage = () => {
-  setCurrentPage((prevPage) => prevPage - 1);
-};
+  const goToPrevPage = () => {
+    setCurrentPage((prevPage) => prevPage - 1);
+  };
 
 
   useEffect(() => {
@@ -104,86 +119,97 @@ const goToPrevPage = () => {
     // Fetch products when the component mounts
     fetchProducts();
   }, [currentPage]);
+  console.log(isAuthenticated)
 
   return (
     <div>
-      <div className='navdiv hover'
-       >
-    
-        <img     src="https://buildwithinnovation.com/wp-content/uploads/2022/10/retina-logo.png"
- alt="Logo" style={{ width: '100px', marginRight: '10px' }} />
-        
-      
-      <div style={{width:'40%'}}>
-        <input
-          type="text"
-          placeholder="Search products by name"
-          value={searchTerm}
-          onChange={handleSearch}
-          style={{borderRadius:'18px',width:'100%'}}
-        />
-      
-      </div>
-    
+      <div className='navdiv '>
 
-      <div>
-      <p style={{ position: 'relative', display: 'inline-block' }}>
-  <IoCart style={{ fontSize: '30px' }} />
-  <span style={{ position: 'absolute', top: '-10px', right: '-10px', background: 'blue', borderRadius: '50%', padding: '3px', color: 'white' }}>{cart.length}</span>
-</p>
-        {/* Display total amount of the cart */}
-      </div>
-
-      {/* user profile section */}
-      <div className='navhover' style={{ position: 'relative', top: '0', width: '60px', textAlign: 'center' }}>
-    <img src="https://robohash.org/Jeanne.png?set=set4" alt="User" style={{ width: '50px', borderRadius: '50%', marginBottom: '5px' }} />
-    {/* Dropdown menu */}
-    <div className='dropdown-menu' style={{ position: 'absolute', top: '100%', right: '0', background: '#fff', border: '1px solid #ccc', borderRadius: '5px', textAlign: 'left', display: 'block' }}>
-      <ul style={{ listStyle: 'none', padding: '0' }}>
-        <li>Hi {userdata.firstName}</li>
-        <li>
-          <button onClick={handlelogout}>
-            Sign Out
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
+        <img src="https://buildwithinnovation.com/wp-content/uploads/2022/10/retina-logo.png"
+          alt="Logo" style={{ width: '100px', marginRight: '10px' }} />
 
 
+        <div style={{ width: '40%' }}>
+          <input
+            type="text"
+            placeholder="Search products by name"
+            value={searchTerm}
+            onChange={handleSearch}
+            style={{ borderRadius: '18px', width: '100%' }}
+          />
 
-      </div>
-
-    
-
-      <div style={{display:"flex", paddingTop:"20px"}}>
-      <div>
-          {/* Price range filter component */}
-       
-    <input type="number" value={minPrice} onChange={handleMinPriceChange} placeholder='Min'/>
-  
-    <input type="number" value={maxPrice} onChange={handleMaxPriceChange} placeholder='Max'/>
-    <button onClick={filterProductsByPrice}>Apply Filter</button>
         </div>
-      <div>
 
-        {/* <h1>
+
+        <div style={{display:'flex',justifyContent:"center",alignItems:"center",gap:"5px"}}>
+          <p style={{ position: 'relative', display: 'inline-block' }}>
+            <IoCart style={{ fontSize: '30px' }} />
+            <span style={{ position: 'absolute', top: '-10px', right: '-10px', background: 'blue', borderRadius: '50%', padding: '3px', color: 'white' }}>{cart.length}</span>
+       
+          </p>
+          <span>Total Price: {totalPrice}
+</span>
+          {/* Display total amount of the cart */}
+        </div>
+
+        {/* user profile section */}
+        <div className='navhover' style={{ position: 'relative', top: '0', width: '10%', textAlign: 'center' }}>
+          <img src={userdata.image} alt="User" style={{ width: '50px', borderRadius: '50%', marginBottom: '5px' }} />
+          {/* Dropdown menu */}
+          <div className='dropdown-menu' style={{ position: 'absolute', top: '100%', right: '0', background: '#fff', border: '1px solid #ccc', borderRadius: '5px', textAlign: 'left', display: 'block' }}>
+            <ul style={{ listStyle: 'none', padding: '5px' }}>
+              <li>Hi, {userdata.firstName}</li>
+              <li>
+                <button onClick={handlelogout} style={{width:"100%",padding:'0px',marginTop:'5px'}}>
+                  Sign Out
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+
+
+      </div>
+
+<br />
+<br />
+<br />
+
+      <div style={{ display: "flex", paddingTop: "20px" ,width:'90%',margin:'auto' ,gap:'2%'}}>
+        <div style={{width:'20%'}}>
+          {/* Price range filter component */}
+          <h3>Price Filter</h3>
+
+ <div style={{display:'flex',paddingBottom:'10px',justifyContent:'center',alignItems:'center'}}>         <input type="number" value={minPrice} onChange={handleMinPriceChange} placeholder='Min' style={{width:'30%'}}/>
+
+<input type="number" value={maxPrice} onChange={handleMaxPriceChange} placeholder='Max' style={{width:'30%'}}/>
+
+ </div>
+          <button onClick={filterProductsByPrice}>Apply Filter</button>
+        </div>
+        <div style={{width:"78%"}}>
+
+          {/* <h1>
           products
         </h1> */}
-        <div className="product-card-container">
-        {filteredProducts.map((product) => (
-          <Products key={product.id} product={product} addToCart={addToCart}/>
-        ))}
+          <div className="product-card-container">
+            {filteredProducts.map((product) => (
+              <Products key={product.id} product={product} addToCart={addToCart} cart={cart} removeFromCart={removeFromCart}/>
+            ))}
+          </div>
+        </div>
       </div>
-      </div>
-      </div>
-      <div style={{display:'flex', justifyContent:'center',alignItems:'center',margin:'10px'}}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '15px 0 ' }}>
 
-    <button onClick={goToPrevPage} disabled={currentPage === 1} style={{width:'40px',borderRadius:'50%'}}>Prev</button>
-    <span>{currentPage}</span>
-    <button onClick={goToNextPage} style={{width:'40px',borderRadius:'50%'}}>Next</button>
+        <button onClick={goToPrevPage} disabled={currentPage === 1} style={{ width: '50px', borderRadius: '50%' ,textAlign:"left",margin:"0 5px"}}>Prev</button>
+        <span style={{border:"1px solid grey",borderRadius:'50%',width:"20px",background:'light-grey'}}>{currentPage}</span>
+        <button onClick={goToNextPage} style={{ width: '50px', borderRadius: '50%' ,margin:"0 5px"}}>Next</button>
+      </div>
+
+<div>
+<Footer/>
 </div>
-
     </div>
   );
 };

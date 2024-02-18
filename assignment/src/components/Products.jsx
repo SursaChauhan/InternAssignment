@@ -1,7 +1,8 @@
 import React from 'react';
 import './Home.css'
 
-const Products = ({key ,product, addToCart}) => {
+const Products = ({key ,product, addToCart,cart,removeFromCart}) => {
+  const isInCart = cart.some((item) => item.id === product.id);
   return (
     <div className="product-card">
 <div>
@@ -10,7 +11,11 @@ const Products = ({key ,product, addToCart}) => {
 <div className="product-details">
     <p>{product.title}</p>
     <p> Price : Rs {product.price}</p>
-    <button onClick={addToCart}>Add to cart</button>
+    {isInCart ? (
+          <button onClick={() => removeFromCart(product)}>Remove from cart</button>
+        ) : (
+          <button onClick={() => addToCart(product)}>Add to cart</button>
+        )}
 </div>
     </div>
   )

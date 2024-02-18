@@ -2,12 +2,12 @@ import React from 'react'
 import {Routes,Route, Navigate} from 'react-router-dom';
 import Login from '../components/Login';
 import Home from '../components/Home';
-import ProtectedRoute from './ProtectedRoute';
 import { useContext } from 'react';
 import AppContext from '../components/AppContext';
 
 const Routers = () => {
     const {isAuthenticated}=useContext(AppContext);
+    console.log(isAuthenticated);
 
   return (
     <div>

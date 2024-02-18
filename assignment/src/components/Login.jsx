@@ -1,6 +1,5 @@
 import React,{useContext, useState} from 'react';
 import AppContext from './AppContext';
-import { Link } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 import './Login.css'
 
@@ -10,7 +9,6 @@ const {login}=useContext(AppContext);
 const [username,setUserName] =useState('');
 const [password,setPassword] =useState('');
 const [usertoken,setUserToken] =useState('');
-// const [redirectToHome, setRedirectToHome] = useState(false);
 
 const handleSubmit =async(e)=>{
 e.preventDefault();
@@ -22,12 +20,15 @@ try{
     
     username: username,
     password: password,
-    // expiresInMins: 60, // optional
+     expiresInMins: 60, 
+    // optional
   }),
 
   });
-  const { token } = await response.json();
+  const { token } = await response.json() || localStorage.getItem('token');
   console.log(token);
+  localStorage.setItem('token', JSON.stringify(token));
+
 if(token){
   setUserToken(token);
   login(token);

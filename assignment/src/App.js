@@ -1,5 +1,6 @@
 import './App.css';
 import Routers from './Routes/Route';
+import Home from './components/Home';
 import Login from './components/Login';
 
 
@@ -8,6 +9,7 @@ function App() {
     <div className="App">
       <Routers>
       <Login/>
+      <Home/>
       </Routers>
       
    
