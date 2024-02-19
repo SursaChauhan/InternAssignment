@@ -155,7 +155,7 @@ const Home = () => {
             <span style={{ position: 'absolute', top: '-10px', right: '-10px', background: 'blue', borderRadius: '50%', padding: '3px', color: 'white' }}>{cart.length}</span>
        
           </p>
-          <span>Total Price: {totalPrice}
+          <span className='totalprice'>Total Price: {totalPrice}
 </span>
           {/* Display total amount of the cart */}
         </div>
@@ -188,9 +188,9 @@ const Home = () => {
           {/* Price range filter component */}
           <h3>Price Filter</h3>
 
- <div style={{display:'flex',paddingBottom:'10px',justifyContent:'center',alignItems:'center'}}>         <input type="number" value={minPrice} onChange={handleMinPriceChange} placeholder='Min' style={{width:'30%'}}/>
+ <div className='filter' style={{display:'flex',paddingBottom:'10px',justifyContent:'center',alignItems:'center'}}>         <input type="number" value={minPrice} onChange={handleMinPriceChange} placeholder='Min'/>
 
-<input type="number" value={maxPrice} onChange={handleMaxPriceChange} placeholder='Max' style={{width:'30%'}}/>
+<input type="number" value={maxPrice} onChange={handleMaxPriceChange} placeholder='Max' />
 
  </div>
           <button onClick={filterProductsByPrice}>Apply Filter</button>

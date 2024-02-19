@@ -144,3 +144,62 @@ a {
 ul li ul li a {
   transition: all 0.5s ease;
 }
+.filter >input{
+ max-width: 40%;
+}
+.footer >div{
+  width: 70%;
+}
+
+/* Medium screens (tablets) */
+@media (max-width: 1199px) and (min-width: 768px) {
+  .email{
+    flex-direction: column;
+  }
+.totalprice{
+  display: none;
+}
+}
+
+/* Small screens (phones) */
+@media (max-width: 767px) {
+  .totalprice{
+    display: none;
+  }
+  .email{
+    flex-direction: column;
+  }
+  .product-card-container {
+    width: 85%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* Three equal-width columns */
+    gap: 15px;
+    /* Gap between grid items */
+  }
+}
+@media screen and (max-width: 650px){
+  .product-card-container{
+    width: 75%;
+    grid-template-columns: repeat(1,1fr);
+
+  }
+  .filter{
+    width: 24%;
+    gap: 0;
+    flex-direction: column;
+    width: 100%;
+    padding: auto 5px;
+  }
+  .filter >input{
+   width: 80px;
+   padding: 5px;
+  }
+  .footer >div{
+    width: 100%;
+  }
+  .about{
+    display: none;
+  }
+}
