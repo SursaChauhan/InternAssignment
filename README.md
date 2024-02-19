@@ -21,6 +21,9 @@ This Repository build for a short assignment which is a react app name assignmen
 - Add to cart functionaltiy.
 - pagination for smooth experience
 
+## Authorization 
+# UserName : kminchelle
+# Password : 0lelplR
 ## Project Link
 
 [InternAssignment - Live Demo](https://65d3006d1a4874e54981a74e--aquamarine-macaron-23cac5.netlify.app/)
