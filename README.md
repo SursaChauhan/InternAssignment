@@ -23,7 +23,7 @@ This Repository build for a short assignment which is a react app name assignmen
 
 ## Project Link
 
-[InternAssignment - Live Demo](https://65c1db9ddf583a48fd7a29a9--guileless-travesseiro-d925d9.netlify.app/)
+[InternAssignment - Live Demo](https://65d3006d1a4874e54981a74e--aquamarine-macaron-23cac5.netlify.app/)
 
 ## Difficulties Faced
 
